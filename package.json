@@ -18,7 +18,8 @@
     "react-dom": "^18.3.1",
     "react-multi-carousel": "^2.8.5",
     "react-on-screen": "^2.1.1",
-    "react-router-dom": "^7.1.1"
+    "react-router-dom": "^7.1.1",
+    "s4rrar-personal-website": "file:"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
