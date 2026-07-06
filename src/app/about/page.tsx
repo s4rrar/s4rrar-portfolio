@@ -1,0 +1,364 @@
+import {
+  Avatar,
+  Button,
+  Column,
+  Heading,
+  Icon,
+  IconButton,
+  Media,
+  Tag,
+  Text,
+  Meta,
+  Schema,
+  Row,
+} from "@once-ui-system/core";
+import { baseURL, about, person, social, home } from "@/resources";
+import TableOfContents from "@/components/about/TableOfContents";
+import styles from "@/components/about/about.module.scss";
+import React from "react";
+import { getTranslations, getDir } from "@/i18n";
+import { cookies } from "next/headers";
+
+export async function generateMetadata() {
+  return Meta.generate({
+    title: about.title,
+    description: about.description,
+    baseURL: baseURL,
+    image: home.image,
+    path: about.path,
+  });
+}
+
+export default async function About() {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get("locale")?.value || "en";
+  const t = getTranslations(locale);
+  const dir = getDir(locale);
+
+  const structure = [
+    {
+      title: t.about.intro.title,
+      display: about.intro.display,
+      items: [],
+    },
+    {
+      title: t.about.work.title,
+      display: about.work.display,
+      items: about.work.experiences.map((experience) => experience.company),
+    },
+    {
+      title: t.about.studies.title,
+      display: about.studies.display,
+      items: about.studies.institutions.map((institution) => institution.name),
+    },
+    {
+      title: t.about.technical.title,
+      display: about.technical.display,
+      items: about.technical.skills.map((skill) => skill.title),
+    },
+  ];
+  return (
+    <Column maxWidth="m" className="cursor-default">
+      <Schema
+        as="webPage"
+        baseURL={baseURL}
+        title={about.title}
+        description={about.description}
+        path={about.path}
+        image={home.image}
+        author={{
+          name: person.name,
+          url: `${baseURL}${about.path}`,
+          image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      {about.tableOfContent.display && (
+        <Column
+          left={dir === "rtl" ? undefined : "0"}
+          right={dir === "rtl" ? "0" : undefined}
+          style={{ top: "50%", transform: "translateY(-50%)" }}
+          position="fixed"
+          paddingLeft={dir === "rtl" ? undefined : "24"}
+          paddingRight={dir === "rtl" ? "24" : undefined}
+          gap="32"
+          s={{ hide: true }}
+        >
+          <TableOfContents structure={structure} about={about} />
+        </Column>
+      )}
+      <Row fillWidth s={{ direction: "column" }} horizontal="center">
+        {about.avatar.display && (
+          <Column
+            className={styles.avatar}
+            top="64"
+            fitHeight
+            position="sticky"
+            s={{ position: "relative", style: { top: "auto" } }}
+            xs={{ style: { top: "auto" } }}
+            minWidth="160"
+            paddingX="l"
+            paddingBottom="xl"
+            gap="m"
+            flex={3}
+            horizontal="center"
+          >
+            <Avatar src={person.avatar} size="xl" />
+            <Row gap="8" vertical="center">
+              <Icon onBackground="accent-weak" name="globe" />
+              {t.person.location}
+            </Row>
+            {person.languages && person.languages.length > 0 && (
+              <Row wrap gap="8">
+                {person.languages.map((language, index) => (
+                  <Tag key={index} size="l">
+                    {language}
+                  </Tag>
+                ))}
+              </Row>
+            )}
+          </Column>
+        )}
+        <Column className={styles.blockAlign} flex={9} maxWidth={40}>
+          <Column
+            id={t.about.intro.title}
+            fillWidth
+            minHeight="160"
+            vertical="center"
+            marginBottom="32"
+          >
+            {about.telegram.display && (
+              <Row
+                fitWidth
+                border="brand-alpha-medium"
+                background="brand-alpha-weak"
+                radius="full"
+                padding="4"
+                gap="8"
+                marginBottom="m"
+                vertical="center"
+                className={styles.blockAlign}
+                style={{
+                  backdropFilter: "blur(var(--static-space-1))",
+                }}
+              >
+                <Icon
+                  paddingLeft={dir === "rtl" ? undefined : "12"}
+                  paddingRight={dir === "rtl" ? "12" : undefined}
+                  name="telegram"
+                  onBackground="brand-weak"
+                />
+                <Row paddingX="8">{t.about.telegram}</Row>
+                <IconButton
+                  href={about.telegram.link}
+                  data-border="rounded"
+                  variant="secondary"
+                  icon={dir === "rtl" ? "chevronLeft" : "chevronRight"}
+                />
+              </Row>
+            )}
+            <Heading className={styles.textAlign} variant="display-strong-xl">
+              {t.person.name}
+            </Heading>
+            <Text
+              className={styles.textAlign}
+              variant="display-default-xs"
+              onBackground="neutral-weak"
+            >
+              {t.person.role}
+            </Text>
+            {social.length > 0 && (
+              <Row
+                className={styles.blockAlign}
+                paddingTop="20"
+                paddingBottom="8"
+                gap="8"
+                wrap
+                horizontal="center"
+                fitWidth
+                data-border="rounded"
+              >
+                {social.map(
+                  (item) =>
+                    item.link && (
+                      <React.Fragment key={item.name}>
+                        <Row s={{ hide: true }}>
+                          <Button
+                            key={item.name}
+                            href={item.link}
+                            prefixIcon={item.icon}
+                            label={t.about.social[item.icon as keyof typeof t.about.social]}
+                            size="s"
+                            weight="default"
+                            variant="secondary"
+                          />
+                        </Row>
+                        <Row hide s={{ hide: false }}>
+                          <IconButton
+                            size="l"
+                            key={`${item.name}-icon`}
+                            href={item.link}
+                            icon={item.icon}
+                            variant="secondary"
+                          />
+                        </Row>
+                      </React.Fragment>
+                    ),
+                )}
+              </Row>
+            )}
+          </Column>
+
+          {about.intro.display && (
+            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+              {t.about.intro.description}
+            </Column>
+          )}
+
+          {about.work.display && (
+            <>
+              <Heading as="h2" id={t.about.work.title} variant="display-strong-s" marginBottom="m">
+                {t.about.work.title}
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="40">
+                {t.about.work.experiences.map((experience, index) => (
+                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
+                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
+                      <Text id={experience.company} variant="heading-strong-l">
+                        {experience.company}
+                      </Text>
+                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                        {experience.timeframe}
+                      </Text>
+                    </Row>
+                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
+                      {experience.role}
+                    </Text>
+                    <Column as="ul" gap="16">
+                      {experience.achievements.map(
+                        (achievement: React.ReactNode, index: number) => (
+                          <Text
+                            as="li"
+                            variant="body-default-m"
+                            key={`${experience.company}-${index}`}
+                          >
+                            {achievement}
+                          </Text>
+                        ),
+                      )}
+                    </Column>
+                    {experience.images && experience.images.length > 0 && (
+                      <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
+                        {experience.images.map((image, index) => (
+                          <Row
+                            key={index}
+                            border="neutral-medium"
+                            radius="m"
+                            minWidth={image.width}
+                            height={image.height}
+                          >
+                            <Media
+                              enlarge
+                              radius="m"
+                              sizes={image.width.toString()}
+                              alt={image.alt}
+                              src={image.src}
+                            />
+                          </Row>
+                        ))}
+                      </Row>
+                    )}
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
+
+          {about.studies.display && (
+            <>
+              <Heading
+                as="h2"
+                id={t.about.studies.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
+                {t.about.studies.title}
+              </Heading>
+              <Column fillWidth gap="l" marginBottom="40">
+                {t.about.studies.institutions.map((institution, index) => (
+                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
+                    <Text id={institution.name} variant="heading-strong-l">
+                      {institution.name}
+                    </Text>
+                    <Text variant="heading-default-xs" onBackground="neutral-weak">
+                      {institution.description}
+                    </Text>
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
+
+          {about.technical.display && (
+            <>
+              <Heading
+                as="h2"
+                id={t.about.technical.title}
+                variant="display-strong-s"
+                marginBottom="40"
+              >
+                {t.about.technical.title}
+              </Heading>
+              <Column fillWidth gap="l">
+                {about.technical.skills.map((skill, index) => (
+                  <Column key={`${skill}-${index}`} fillWidth gap="4">
+                    <Text id={skill.title} variant="heading-strong-l">
+                      {skill.title}
+                    </Text>
+                    <Text variant="body-default-m" onBackground="neutral-weak">
+                      {skill.description}
+                    </Text>
+                    {skill.tags && skill.tags.length > 0 && (
+                      <Row wrap gap="8" paddingTop="8">
+                        {skill.tags.map((tag, tagIndex) => (
+                          <Tag
+                            key={`${skill.title}-${tagIndex}`}
+                            size="l"
+                            prefixIcon={dir === "rtl" ? undefined : tag.icon}
+                            suffixIcon={dir === "rtl" ? tag.icon : undefined}
+                          >
+                            {tag.name}
+                          </Tag>
+                        ))}
+                      </Row>
+                    )}
+                    {skill.images && skill.images.length > 0 && (
+                      <Row fillWidth paddingTop="m" gap="12" wrap>
+                        {skill.images.map((image, index) => (
+                          <Row
+                            key={index}
+                            border="neutral-medium"
+                            radius="m"
+                            minWidth={image.width}
+                            height={image.height}
+                          >
+                            <Media
+                              enlarge
+                              radius="m"
+                              sizes={image.width.toString()}
+                              alt={image.alt}
+                              src={image.src}
+                            />
+                          </Row>
+                        ))}
+                      </Row>
+                    )}
+                  </Column>
+                ))}
+              </Column>
+            </>
+          )}
+        </Column>
+      </Row>
+    </Column>
+  );
+}
