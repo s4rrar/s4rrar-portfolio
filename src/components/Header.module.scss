@@ -2,10 +2,24 @@
 
 .mask {
     pointer-events: none;
-    backdrop-filter: blur(0.5rem);
+    backdrop-filter: blur(0.75rem);
     background: linear-gradient(to bottom, var(--page-background), var(--static-transparent));
     mask-image: linear-gradient(rgba(0,0,0) 25%, rgba(0, 0, 0, 0) 100%);
     mask-size: 100% 100%;
+}
+
+.navDock {
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    background: var(--surface-translucent);
+    border: 1px solid var(--neutral-alpha-weak);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1), transform 0.2s ease;
+
+    &:hover {
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.16);
+    }
 }
 
 @media (max-width: breakpoints.$s) {

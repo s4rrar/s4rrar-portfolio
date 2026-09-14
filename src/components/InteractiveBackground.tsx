@@ -98,21 +98,24 @@ export function InteractiveBackground() {
       if (typeof window === "undefined") return;
       const root = document.documentElement;
       const styles = getComputedStyle(root);
-      
+
       isDarkMode = root.getAttribute("data-theme") !== "light";
 
       // Read Once UI CSS variables
-      const rawBrand = styles.getPropertyValue("--brand-medium").trim() || 
-                        styles.getPropertyValue("--brand-solid").trim() ||
-                        styles.getPropertyValue("--brand-strong").trim() ||
-                        "";
-      const rawAccent = styles.getPropertyValue("--accent-medium").trim() || 
-                         styles.getPropertyValue("--accent-solid").trim() ||
-                         styles.getPropertyValue("--accent-strong").trim() ||
-                         "";
-      const rawNeutral = styles.getPropertyValue("--neutral-medium").trim() || 
-                          styles.getPropertyValue("--neutral-solid").trim() ||
-                          "";
+      const rawBrand =
+        styles.getPropertyValue("--brand-medium").trim() ||
+        styles.getPropertyValue("--brand-solid").trim() ||
+        styles.getPropertyValue("--brand-strong").trim() ||
+        "";
+      const rawAccent =
+        styles.getPropertyValue("--accent-medium").trim() ||
+        styles.getPropertyValue("--accent-solid").trim() ||
+        styles.getPropertyValue("--accent-strong").trim() ||
+        "";
+      const rawNeutral =
+        styles.getPropertyValue("--neutral-medium").trim() ||
+        styles.getPropertyValue("--neutral-solid").trim() ||
+        "";
 
       const parsedBrand = parseToRgb(rawBrand);
       const parsedAccent = parseToRgb(rawAccent);
@@ -235,12 +238,36 @@ export function InteractiveBackground() {
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("mouseleave", onMouseLeave);
-    window.addEventListener("resize", onResize);
+    // Check reduced motion preference
+    const mediaReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let isReducedMotion = mediaReducedMotion.matches;
+
+    const onReducedMotionChange = (e: MediaQueryListEvent) => {
+      isReducedMotion = e.matches;
+    };
+    mediaReducedMotion.addEventListener("change", onReducedMotionChange);
 
     // Dynamic animation loop
     const renderFrame = () => {
       // Pause drawing if tab is completely hidden
       if (document.visibilityState === "hidden") {
+        animationFrameId = requestAnimationFrame(renderFrame);
+        return;
+      }
+
+      if (isReducedMotion) {
+        // Draw one static ambient frame and wait
+        ctx.clearRect(0, 0, width, height);
+        orbs.forEach((orb) => {
+          const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
+          const baseRgb = colors[orb.colorType];
+          grad.addColorStop(0, `rgba(${baseRgb}, 0.05)`);
+          grad.addColorStop(1, `rgba(${baseRgb}, 0)`);
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
+          ctx.fill();
+        });
         animationFrameId = requestAnimationFrame(renderFrame);
         return;
       }
@@ -285,17 +312,10 @@ export function InteractiveBackground() {
         }
 
         // Draw radial glowing gradient
-        const grad = ctx.createRadialGradient(
-          renderX,
-          renderY,
-          0,
-          renderX,
-          renderY,
-          orb.radius
-        );
+        const grad = ctx.createRadialGradient(renderX, renderY, 0, renderX, renderY, orb.radius);
 
         const baseRgb = colors[orb.colorType];
-        
+
         // Extremely soft transparency levels appropriate for background glow
         const startOpacity = isDarkMode ? "0.08" : "0.05";
         const midOpacity = isDarkMode ? "0.03" : "0.02";
@@ -320,14 +340,14 @@ export function InteractiveBackground() {
           0,
           mouse.x,
           mouse.y,
-          ambientRadius
+          ambientRadius,
         );
         const brandColor = colors.brand;
         const ambientOpacity = isDarkMode ? 0.08 : 0.16;
         ambientGlow.addColorStop(0, `rgba(${brandColor}, ${ambientOpacity})`);
         ambientGlow.addColorStop(0.5, `rgba(${brandColor}, ${ambientOpacity * 0.3})`);
         ambientGlow.addColorStop(1, `rgba(${brandColor}, 0)`);
-        
+
         ctx.fillStyle = ambientGlow;
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, ambientRadius, 0, Math.PI * 2);
@@ -341,14 +361,14 @@ export function InteractiveBackground() {
           0,
           mouse.x,
           mouse.y,
-          coreRadius
+          coreRadius,
         );
         const accentColor = colors.accent;
         const coreOpacity = isDarkMode ? 0.06 : 0.12;
         coreGlow.addColorStop(0, `rgba(${accentColor}, ${coreOpacity})`);
         coreGlow.addColorStop(0.6, `rgba(${accentColor}, ${coreOpacity * 0.25})`);
         coreGlow.addColorStop(1, `rgba(${accentColor}, 0)`);
-        
+
         ctx.fillStyle = coreGlow;
         ctx.beginPath();
         ctx.arc(mouse.x, mouse.y, coreRadius, 0, Math.PI * 2);
@@ -402,7 +422,7 @@ export function InteractiveBackground() {
           if (dist < activeRadius) {
             const ratio = (activeRadius - dist) / activeRadius; // 0 to 1
             const forceDirection = Math.atan2(dy, dx);
-            
+
             // Push away from mouse
             p.vx += Math.cos(forceDirection) * ratio * 0.15;
             p.vy += Math.sin(forceDirection) * ratio * 0.15;
@@ -469,6 +489,7 @@ export function InteractiveBackground() {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("mouseleave", onMouseLeave);
       window.removeEventListener("resize", onResize);
+      mediaReducedMotion.removeEventListener("change", onReducedMotionChange);
     };
   }, []);
 

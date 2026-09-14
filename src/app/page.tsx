@@ -10,6 +10,7 @@ import {
   Schema,
   Meta,
   Line,
+  SmartLink,
 } from "@once-ui-system/core";
 import { home, about, person, baseURL } from "@/resources";
 import { Mailchimp } from "@/components";
@@ -56,9 +57,9 @@ export default async function Home() {
               horizontal="center"
               paddingTop="16"
               paddingBottom="32"
-              paddingLeft="12"
             >
               <Badge
+                className="tactile-press"
                 background="brand-alpha-weak"
                 paddingX="12"
                 paddingY="4"
@@ -76,7 +77,7 @@ export default async function Home() {
             </RevealFx>
           )}
           <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
-            <Heading wrap="balance" variant="display-strong-l">
+            <Heading wrap="balance" variant="display-strong-l" className="display-optical">
               {t.home.headline}
             </Heading>
           </RevealFx>
@@ -85,34 +86,39 @@ export default async function Home() {
               {t.home.subline}
             </Text>
           </RevealFx>
-          <RevealFx paddingTop="12" delay={0.4} horizontal="center" paddingLeft="12">
-            <Button
-              id="about"
-              data-border="rounded"
-              href={about.path}
-              variant="secondary"
-              size="m"
-              weight="default"
-              arrowIcon
-            >
-              <Row
-                gap="8"
-                vertical="center"
-                paddingLeft={dir === "rtl" ? "4" : undefined}
-                paddingRight={dir === "rtl" ? undefined : "4"}
+          <RevealFx paddingTop="12" delay={0.4} horizontal="center">
+            <Row gap="12" wrap horizontal="center">
+              <Button
+                id="about"
+                className="tactile-press"
+                data-border="rounded"
+                href={about.path}
+                variant="secondary"
+                size="m"
+                weight="default"
+                arrowIcon
               >
-                {about.avatar.display && (
-                  <Avatar
-                    marginLeft={dir === "rtl" ? "8" : undefined}
-                    marginRight={dir === "rtl" ? undefined : "8"}
-                    style={dir === "rtl" ? { marginRight: "-0.75rem" } : { marginLeft: "-0.75rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
-                )}
-                {t.about.title}
-              </Row>
-            </Button>
+                <Row
+                  gap="8"
+                  vertical="center"
+                  paddingLeft={dir === "rtl" ? "4" : undefined}
+                  paddingRight={dir === "rtl" ? undefined : "4"}
+                >
+                  {about.avatar.display && (
+                    <Avatar
+                      marginLeft={dir === "rtl" ? "8" : undefined}
+                      marginRight={dir === "rtl" ? undefined : "8"}
+                      style={
+                        dir === "rtl" ? { marginRight: "-0.75rem" } : { marginLeft: "-0.75rem" }
+                      }
+                      src={person.avatar}
+                      size="m"
+                    />
+                  )}
+                  {t.about.title}
+                </Row>
+              </Button>
+            </Row>
           </RevealFx>
         </Column>
       </Column>
@@ -120,14 +126,25 @@ export default async function Home() {
       {/* GitHub Projects Section */}
       <Column fillWidth maxWidth="l" paddingY="40">
         <RevealFx translateY="8" fillWidth>
-          <Column fillWidth gap="m" paddingBottom="24">
-            <Heading variant="display-strong-s" onBackground="neutral-strong">
-              {t.projects.featured}
-            </Heading>
-            <Text variant="body-default-l" onBackground="neutral-weak">
-              {t.projects.selection}
-            </Text>
-          </Column>
+          <Row fillWidth horizontal="between" vertical="end" wrap gap="12" paddingBottom="24">
+            <Column gap="8">
+              <Heading variant="display-strong-s" onBackground="neutral-strong">
+                {t.projects.featured}
+              </Heading>
+              <Text variant="body-default-l" onBackground="neutral-weak">
+                {t.projects.selection}
+              </Text>
+            </Column>
+            <SmartLink
+              href="https://github.com/s4rrar"
+              suffixIcon="arrowUpRight"
+              className="tactile-press"
+            >
+              <Text variant="label-default-s" onBackground="brand-medium">
+                GitHub / s4rrar
+              </Text>
+            </SmartLink>
+          </Row>
         </RevealFx>
 
         <RevealFx translateY="16" delay={0.2}>

@@ -1,10 +1,17 @@
-.button {
-  display: flex;
+.toggleWrapper {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  
+
   svg {
-    width: 1em;
-    height: 1em;
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  &:hover svg {
+    transform: rotate(15deg) scale(1.06);
+  }
+
+  &:active svg {
+    transform: rotate(35deg) scale(0.92);
   }
 }

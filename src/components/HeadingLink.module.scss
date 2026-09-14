@@ -1,24 +1,31 @@
 .control {
-    cursor: pointer;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 
-    &:hover {
-        .visibility {
-            opacity: 1;
-        }
-
-        .text {
-            text-decoration-line: underline;
-        }
+  &:hover {
+    .visibility {
+      opacity: 1;
+      transform: scale(1);
     }
+
+    .text {
+      color: var(--brand-medium);
+    }
+  }
 }
 
 .text {
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.25em;
-    text-decoration-color: var(--neutral-border-strong);
+  transition: color 0.15s ease;
 }
 
 .visibility {
-    opacity: 0;
-    transform: scale(0.875);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.18s cubic-bezier(0.2, 0, 0, 1), transform 0.18s cubic-bezier(0.2, 0, 0, 1);
+
+  &:focus-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

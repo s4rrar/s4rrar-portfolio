@@ -2,7 +2,7 @@
 
 import { mailchimp, newsletter } from "@/resources";
 import { Button, Heading, Input, Text, Background, Column, Row } from "@once-ui-system/core";
-import { opacity, SpacingToken } from "@once-ui-system/core";
+import { Opacity, SpacingToken } from "@once-ui-system/core";
 import { useState } from "react";
 import { useTranslation } from "@/i18n/LanguageProvider";
 
@@ -75,7 +75,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         }}
         gradient={{
           display: mailchimp.effects.gradient.display,
-          opacity: mailchimp.effects.gradient.opacity as opacity,
+          opacity: mailchimp.effects.gradient.opacity as Opacity,
           x: mailchimp.effects.gradient.x,
           y: mailchimp.effects.gradient.y,
           width: mailchimp.effects.gradient.width,
@@ -86,20 +86,20 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         }}
         dots={{
           display: mailchimp.effects.dots.display,
-          opacity: mailchimp.effects.dots.opacity as opacity,
+          opacity: mailchimp.effects.dots.opacity as Opacity,
           size: mailchimp.effects.dots.size as SpacingToken,
           color: mailchimp.effects.dots.color,
         }}
         grid={{
           display: mailchimp.effects.grid.display,
-          opacity: mailchimp.effects.grid.opacity as opacity,
+          opacity: mailchimp.effects.grid.opacity as Opacity,
           color: mailchimp.effects.grid.color,
           width: mailchimp.effects.grid.width,
           height: mailchimp.effects.grid.height,
         }}
         lines={{
           display: mailchimp.effects.lines.display,
-          opacity: mailchimp.effects.lines.opacity as opacity,
+          opacity: mailchimp.effects.lines.opacity as Opacity,
           size: mailchimp.effects.lines.size as SpacingToken,
           thickness: mailchimp.effects.lines.thickness,
           angle: mailchimp.effects.lines.angle,
@@ -174,7 +174,13 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           </div>
           <div className="clear">
             <Row height="48" vertical="center">
-              <Button id="mc-embedded-subscribe" value={t.mailchimp.subscribe} size="m" fillWidth>
+              <Button
+                id="mc-embedded-subscribe"
+                className="tactile-press"
+                value={t.mailchimp.subscribe}
+                size="m"
+                fillWidth
+              >
                 {t.mailchimp.subscribe}
               </Button>
             </Row>

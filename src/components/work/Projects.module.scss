@@ -1,17 +1,62 @@
-.hover {
-    transition: var(--transition-micro-medium);
+@use "../breakpoints.scss" as breakpoints;
 
-    &:hover {
-        transform: translateX(var(--static-space-8));
+.projectCard {
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s ease;
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--surface-translucent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
 
-        .indicator {
-            transform: rotate(0);
-        }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14), 0 0 24px var(--brand-alpha-weak);
+    border-color: var(--brand-alpha-medium);
+
+    .repoTitle {
+      color: var(--brand-medium);
     }
+
+    .titleArrow {
+      opacity: 1;
+      transform: translate(2px, -2px);
+    }
+  }
 }
 
-.indicator {
-    transform: rotate(-90deg);
-    left: -2rem;
-    transition: var(--transition-micro-medium);
+.repoTitle {
+  transition: color 0.15s ease;
+}
+
+.titleArrow {
+  opacity: 0.4;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.topicTag {
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background-color: var(--brand-alpha-weak);
+  border: 1px solid var(--brand-alpha-weak);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--neutral-strong);
+  transition: background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--brand-alpha-medium);
+    border-color: var(--brand-alpha-strong);
+    transform: scale(1.03);
+  }
 }

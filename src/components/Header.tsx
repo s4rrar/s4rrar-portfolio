@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
+import { Fade, Flex, Icon, Line, Row, ToggleButton } from "@once-ui-system/core";
 
 import { routes, display, person, about } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
@@ -77,39 +77,50 @@ export const Header = () => {
           position: "fixed",
         }}
       >
-        <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && <Row s={{ hide: true }}>{t.person.location}</Row>}
+        <Row paddingLeft="12" fillWidth vertical="center">
+          {display.location && (
+            <Row
+              s={{ hide: true }}
+              vertical="center"
+              textVariant="label-default-s"
+              onBackground="neutral-weak"
+            >
+              <span>{t.person.location}</span>
+            </Row>
+          )}
         </Row>
         <Row fillWidth horizontal="center">
-          <Row
-            background="page"
-            border="neutral-alpha-weak"
-            radius="m-4"
-            shadow="l"
-            padding="4"
-            horizontal="center"
-            zIndex={1}
-          >
+          <Row className={styles.navDock} radius="m-4" padding="4" horizontal="center" zIndex={1}>
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
+                <ToggleButton
+                  className="tactile-press"
+                  prefixIcon="home"
+                  href="/"
+                  selected={pathname === "/"}
+                  aria-label={t.home.label}
+                />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (
                 <>
                   <Row s={{ hide: true }}>
                     <ToggleButton
+                      className="tactile-press"
                       prefixIcon="person"
                       href="/about"
                       label={t.about.label}
                       selected={pathname === "/about"}
+                      aria-label={t.about.label}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
                     <ToggleButton
+                      className="tactile-press"
                       prefixIcon="person"
                       href="/about"
                       selected={pathname === "/about"}
+                      aria-label={t.about.label}
                     />
                   </Row>
                 </>
@@ -134,7 +145,19 @@ export const Header = () => {
             gap="20"
           >
             <Flex s={{ hide: true }}>
-              {display.time && <TimeDisplay timeZone={person.location} />}
+              {display.time && (
+                <Row
+                  gap="8"
+                  vertical="center"
+                  textVariant="label-default-s"
+                  onBackground="neutral-weak"
+                >
+                  <Icon name="clock" size="xs" onBackground="neutral-weak" />
+                  <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                    <TimeDisplay timeZone={person.location} />
+                  </span>
+                </Row>
+              )}
             </Flex>
           </Flex>
         </Flex>

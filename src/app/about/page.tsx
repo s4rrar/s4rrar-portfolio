@@ -57,6 +57,7 @@ export default async function About() {
       items: about.technical.skills.map((skill) => skill.title),
     },
   ];
+
   return (
     <Column maxWidth="m" className="cursor-default">
       <Schema
@@ -72,25 +73,16 @@ export default async function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+
       {about.tableOfContent.display && (
-        <Column
-          left={dir === "rtl" ? undefined : "0"}
-          right={dir === "rtl" ? "0" : undefined}
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft={dir === "rtl" ? undefined : "24"}
-          paddingRight={dir === "rtl" ? "24" : undefined}
-          gap="32"
-          s={{ hide: true }}
-        >
-          <TableOfContents structure={structure} about={about} />
-        </Column>
+        <TableOfContents key="toc-static" structure={structure} about={about} />
       )}
-      <Row fillWidth s={{ direction: "column" }} horizontal="center">
+
+      <Row fillWidth s={{ direction: "column" }} horizontal="center" gap="xl">
         {about.avatar.display && (
           <Column
             className={styles.avatar}
-            top="64"
+            top="80"
             fitHeight
             position="sticky"
             s={{ position: "relative", style: { top: "auto" } }}
@@ -102,15 +94,31 @@ export default async function About() {
             flex={3}
             horizontal="center"
           >
-            <Avatar src={person.avatar} size="xl" />
-            <Row gap="8" vertical="center">
-              <Icon onBackground="accent-weak" name="globe" />
-              {t.person.location}
+            <div
+              style={{
+                position: "relative",
+                padding: "3px",
+                borderRadius: "50%",
+                background:
+                  "linear-gradient(135deg, var(--brand-medium), var(--accent-alpha-medium, var(--brand-alpha-weak)))",
+                boxShadow: "0 0 20px var(--brand-alpha-weak)",
+              }}
+            >
+              <Avatar src={person.avatar} size="xl" />
+            </div>
+            <Row
+              gap="8"
+              vertical="center"
+              textVariant="label-default-s"
+              onBackground="neutral-weak"
+            >
+              <Icon onBackground="brand-medium" name="globe" size="xs" />
+              <span>{t.person.location}</span>
             </Row>
             {person.languages && person.languages.length > 0 && (
-              <Row wrap gap="8">
+              <Row wrap gap="8" horizontal="center">
                 {person.languages.map((language, index) => (
-                  <Tag key={index} size="l">
+                  <Tag key={index} size="m" className="tactile-press">
                     {language}
                   </Tag>
                 ))}
@@ -118,6 +126,7 @@ export default async function About() {
             )}
           </Column>
         )}
+
         <Column className={styles.blockAlign} flex={9} maxWidth={40}>
           <Column
             id={t.about.intro.title}
@@ -136,9 +145,11 @@ export default async function About() {
                 gap="8"
                 marginBottom="m"
                 vertical="center"
-                className={styles.blockAlign}
+                className={`tactile-press ${styles.blockAlign}`}
                 style={{
                   backdropFilter: "blur(var(--static-space-1))",
+                  paddingTop: "7px",
+                  paddingBottom: "7px",
                 }}
               >
                 <Icon
@@ -152,20 +163,23 @@ export default async function About() {
                   href={about.telegram.link}
                   data-border="rounded"
                   variant="secondary"
+                  size="s"
                   icon={dir === "rtl" ? "chevronLeft" : "chevronRight"}
+                  aria-label={t.about.telegram}
                 />
               </Row>
             )}
-            <Heading className={styles.textAlign} variant="display-strong-xl">
+            <Heading className={`${styles.textAlign} display-optical`} variant="display-strong-xl">
               {t.person.name}
             </Heading>
             <Text
               className={styles.textAlign}
-              variant="display-default-xs"
+              variant="heading-default-l"
               onBackground="neutral-weak"
             >
               {t.person.role}
             </Text>
+
             {social.length > 0 && (
               <Row
                 className={styles.blockAlign}
@@ -183,6 +197,7 @@ export default async function About() {
                       <React.Fragment key={item.name}>
                         <Row s={{ hide: true }}>
                           <Button
+                            className="tactile-press"
                             key={item.name}
                             href={item.link}
                             prefixIcon={item.icon}
@@ -194,11 +209,13 @@ export default async function About() {
                         </Row>
                         <Row hide s={{ hide: false }}>
                           <IconButton
+                            className="tactile-press"
                             size="l"
                             key={`${item.name}-icon`}
                             href={item.link}
                             icon={item.icon}
                             variant="secondary"
+                            aria-label={item.name}
                           />
                         </Row>
                       </React.Fragment>
@@ -209,52 +226,117 @@ export default async function About() {
           </Column>
 
           {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+            <Column
+              id={t.about.intro.title}
+              textVariant="body-default-l"
+              fillWidth
+              gap="m"
+              marginBottom="xl"
+              style={{ lineHeight: "1.75" }}
+              onBackground="neutral-medium"
+            >
               {t.about.intro.description}
             </Column>
           )}
 
           {about.work.display && (
             <>
-              <Heading as="h2" id={t.about.work.title} variant="display-strong-s" marginBottom="m">
+              <Heading
+                as="h2"
+                id={t.about.work.title}
+                variant="display-strong-s"
+                marginBottom="m"
+              >
                 {t.about.work.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+
+              <Column
+                fillWidth
+                className="timeline-track"
+                gap="xl"
+                marginBottom="40"
+                style={{ paddingInlineStart: "28px" }}
+              >
                 {t.about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
+                  <Column
+                    key={`${experience.company}-${experience.role}-${index}`}
+                    fillWidth
+                    style={{ position: "relative" }}
+                  >
+                    {/* Milestone node marker */}
+                    <div
+                      className="timeline-node"
+                      style={{
+                        position: "absolute",
+                        insetInlineStart: "-28px",
+                        top: "6px",
+                      }}
+                    />
+
+                    <Row
+                      fillWidth
+                      horizontal="between"
+                      vertical="end"
+                      marginBottom="4"
+                      wrap
+                      gap="8"
+                    >
                       <Text id={experience.company} variant="heading-strong-l">
                         {experience.company}
                       </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                      <Text
+                        variant="label-default-xs"
+                        onBackground="neutral-weak"
+                        style={{
+                          padding: "3px 10px",
+                          borderRadius: "9999px",
+                          background: "var(--neutral-alpha-weak)",
+                          border: "1px solid var(--neutral-alpha-weak)",
+                        }}
+                      >
                         {experience.timeframe}
                       </Text>
                     </Row>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
+                    <Text
+                      variant="body-default-s"
+                      onBackground="brand-weak"
+                      marginBottom="m"
+                    >
                       {experience.role}
                     </Text>
-                    <Column as="ul" gap="16">
-                      {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
+                    <Column gap="12">
+                      {experience.achievements.map((achievement: React.ReactNode, i: number) => (
+                        <Row key={i} gap="8" vertical="start">
+                          <span
+                            style={{
+                              width: "5px",
+                              height: "5px",
+                              borderRadius: "50%",
+                              backgroundColor: "var(--neutral-weak)",
+                              marginTop: "8px",
+                              flexShrink: 0,
+                            }}
+                          />
                           <Text
-                            as="li"
                             variant="body-default-m"
-                            key={`${experience.company}-${index}`}
+                            style={{ lineHeight: "1.65" }}
+                            onBackground="neutral-medium"
                           >
                             {achievement}
                           </Text>
-                        ),
-                      )}
+                        </Row>
+                      ))}
                     </Column>
                     {experience.images && experience.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
-                        {experience.images.map((image, index) => (
+                      <Row fillWidth paddingTop="m" gap="12" wrap>
+                        {experience.images.map((image, i) => (
                           <Row
-                            key={index}
+                            key={i}
                             border="neutral-medium"
                             radius="m"
                             minWidth={image.width}
                             height={image.height}
+                            style={{ overflow: "hidden" }}
                           >
                             <Media
                               enlarge
@@ -283,13 +365,37 @@ export default async function About() {
               >
                 {t.about.studies.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+
+              <Column
+                fillWidth
+                className="timeline-track"
+                gap="xl"
+                marginBottom="40"
+                style={{ paddingInlineStart: "28px" }}
+              >
                 {t.about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
+                  <Column
+                    key={`${institution.name}-${index}`}
+                    fillWidth
+                    gap="4"
+                    style={{ position: "relative" }}
+                  >
+                    <div
+                      className="timeline-node"
+                      style={{
+                        position: "absolute",
+                        insetInlineStart: "-28px",
+                        top: "6px",
+                      }}
+                    />
                     <Text id={institution.name} variant="heading-strong-l">
                       {institution.name}
                     </Text>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
+                    <Text
+                      variant="body-default-m"
+                      onBackground="neutral-weak"
+                      style={{ lineHeight: "1.6" }}
+                    >
                       {institution.description}
                     </Text>
                   </Column>
@@ -304,13 +410,14 @@ export default async function About() {
                 as="h2"
                 id={t.about.technical.title}
                 variant="display-strong-s"
-                marginBottom="40"
+                marginBottom="m"
               >
                 {t.about.technical.title}
               </Heading>
+
               <Column fillWidth gap="l">
                 {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
+                  <Column key={`${skill.title}-${index}`} fillWidth gap="4">
                     <Text id={skill.title} variant="heading-strong-l">
                       {skill.title}
                     </Text>
@@ -333,9 +440,9 @@ export default async function About() {
                     )}
                     {skill.images && skill.images.length > 0 && (
                       <Row fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, index) => (
+                        {skill.images.map((image, i) => (
                           <Row
-                            key={index}
+                            key={i}
                             border="neutral-medium"
                             radius="m"
                             minWidth={image.width}

@@ -70,3 +70,175 @@ html[dir="rtl"] #about [class*="arrowContainer"] {
   margin-right: calc(-1 * var(--static-space-4)) !important;
   transform: scale(0.9) rotate(180deg) !important;
 }
+
+/* ==========================================================================
+   Apple Design Foundations: Typography, Depth, Materials & Motion
+   ========================================================================== */
+
+/* Custom fluid scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-alpha-medium);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-alpha-strong);
+}
+
+/* Text selection styling */
+::selection {
+  background: var(--brand-alpha-medium);
+  color: var(--neutral-strong);
+}
+
+/* Display optical letter-spacing */
+.display-optical {
+  letter-spacing: -0.025em;
+}
+
+/* Shimmer skeleton wave for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--neutral-alpha-weak) 25%,
+    var(--neutral-alpha-medium) 50%,
+    var(--neutral-alpha-weak) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite linear;
+  border-radius: var(--radius-m, 12px);
+}
+
+/* CSS Live Status Beacon Pulse (No Emojis) */
+@keyframes beaconPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 180, 216, 0.6);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(0, 180, 216, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 180, 216, 0);
+  }
+}
+
+.beacon-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--brand-solid, #00b4d8);
+  animation: beaconPulse 2s infinite ease-in-out;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* Apple-style tactile active press response */
+.tactile-press {
+  transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), box-shadow 120ms ease;
+  will-change: transform;
+}
+.tactile-press:active {
+  transform: scale(0.97) !important;
+}
+
+/* Shake animation on rejection / incorrect password */
+@keyframes shakeReject {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+.shake-reject {
+  animation: shakeReject 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Translucent material */
+.apple-glass {
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  background: var(--surface-translucent);
+  border: 1px solid var(--neutral-alpha-weak);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Connected vertical milestone timeline */
+.timeline-track {
+  position: relative;
+}
+.timeline-track::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 7px;
+  top: 16px;
+  bottom: 16px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--neutral-alpha-medium), var(--neutral-alpha-weak));
+}
+
+.timeline-node {
+  position: relative;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--page-background);
+  border: 2px solid var(--neutral-alpha-strong);
+  box-shadow: 0 0 6px var(--neutral-alpha-weak);
+  flex-shrink: 0;
+}
+
+/* Reduced motion and accessibility overrides */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .beacon-dot {
+    animation: none !important;
+  }
+  .skeleton-shimmer {
+    animation: none !important;
+  }
+  .tactile-press:active {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .apple-glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: var(--page-background) !important;
+  }
+}

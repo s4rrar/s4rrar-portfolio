@@ -1,19 +1,67 @@
 @use "../breakpoints.scss" as breakpoints;
 
-.hover {
-    transition: var(--transition-micro-medium);
+.tocItem {
+  cursor: pointer;
+  padding: 4px 0;
+  user-select: none;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
 
-    &:hover {
-        transform: translateX(var(--static-space-4));
+  &:hover {
+    transform: translateX(4px);
+
+    .indicator,
+    .subIndicator {
+      opacity: 1;
+      background-color: var(--brand-solid, #00b4d8);
+      box-shadow: 0 0 8px var(--brand-alpha-strong), 0 0 2px var(--brand-solid, #00b4d8);
     }
+
+    .tocText {
+      color: var(--neutral-strong) !important;
+    }
+  }
+}
+
+:global(html[dir="rtl"]) .tocItem:hover {
+  transform: translateX(-4px);
+}
+
+.indicator {
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  background-color: var(--neutral-alpha-medium);
+  opacity: 0.6;
+  transition: background-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subIndicator {
+  width: 12px;
+  height: 1.5px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  background-color: var(--neutral-alpha-weak);
+  opacity: 0.4;
+  transition: background-color 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tocText {
+  color: var(--neutral-weak);
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+.avatar {
+  border-radius: var(--radius-l, 16px);
 }
 
 @media (max-width: breakpoints.$s) {
-    .textAlign {
-        text-align: center;
-    }
+  .textAlign {
+    text-align: center;
+  }
 
-    .blockAlign {
-        align-self: center;
-    }
+  .blockAlign {
+    align-self: center;
+  }
 }

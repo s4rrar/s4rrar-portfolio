@@ -1,7 +1,26 @@
 @use "./breakpoints.scss" as breakpoints;
 
+.footerContainer {
+  border-top: 1px solid var(--neutral-alpha-weak);
+  position: relative;
+  transition: border-color 0.2s ease;
+}
+
+.backToTop {
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), background-color 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.95);
+  }
+}
+
 @media (max-width: breakpoints.$s) {
-    .mobile {
-        text-align: center;
-    }
+  .mobile {
+    text-align: center;
+    padding-bottom: var(--static-space-64);
+  }
 }

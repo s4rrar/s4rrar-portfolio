@@ -10,4 +10,3 @@ export { ScrollToHash } from "@/components/ScrollToHash";
 export { ThemeToggle } from "@/components/ThemeToggle";
 export { CustomMDX } from "@/components/mdx";
 export { InteractiveBackground } from "@/components/InteractiveBackground";
-

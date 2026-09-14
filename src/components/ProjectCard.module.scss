@@ -1,0 +1,36 @@
+@use "./breakpoints.scss" as breakpoints;
+
+.cardWrapper {
+  border-radius: var(--radius-l, 16px);
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--surface-translucent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12), 0 0 24px var(--brand-alpha-weak);
+    border-color: var(--brand-alpha-medium);
+  }
+}
+
+.linkItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s ease;
+
+  svg {
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  &:hover svg {
+    transform: translateX(4px);
+  }
+}
+
+:global(html[dir="rtl"]) .linkItem:hover svg {
+  transform: translateX(-4px);
+}

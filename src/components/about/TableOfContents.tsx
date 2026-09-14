@@ -46,43 +46,58 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
         top: "50%",
         transform: "translateY(-50%)",
         whiteSpace: "nowrap",
+        zIndex: 10,
+        userSelect: "none",
       }}
       position="fixed"
       paddingLeft={dir === "rtl" ? undefined : "24"}
       paddingRight={dir === "rtl" ? "24" : undefined}
-      gap="32"
+      gap="16"
       m={{ hide: true }}
+      aria-label="Table of contents"
     >
       {structure
         .filter((section) => section.display)
         .map((section, sectionIndex) => (
-          <Column key={sectionIndex} gap="12">
+          <Column key={sectionIndex} gap="8">
             <Flex
               cursor="interactive"
-              className={styles.hover}
-              gap="8"
+              className={styles.tocItem}
+              gap="12"
               vertical="center"
-              onClick={() => scrollTo(section.title, 80)}
+              onClick={() => scrollTo(section.title, 88)}
             >
-              <Flex height="1" minWidth="16" background="neutral-strong"></Flex>
-              <Text>{section.title}</Text>
+              <div className={styles.indicator} />
+              <Text
+                variant="label-default-s"
+                onBackground="neutral-weak"
+                className={styles.tocText}
+              >
+                {section.title}
+              </Text>
             </Flex>
+
             {about.tableOfContent.subItems && (
               <>
                 {section.items.map((item, itemIndex) => (
                   <Flex
                     l={{ hide: true }}
                     key={itemIndex}
-                    style={{ cursor: "pointer" }}
-                    className={styles.hover}
+                    className={styles.tocItem}
                     gap="12"
-                    paddingLeft={dir === "rtl" ? undefined : "24"}
-                    paddingRight={dir === "rtl" ? "24" : undefined}
+                    paddingLeft={dir === "rtl" ? undefined : "16"}
+                    paddingRight={dir === "rtl" ? "16" : undefined}
                     vertical="center"
-                    onClick={() => scrollTo(item, 80)}
+                    onClick={() => scrollTo(item, 88)}
                   >
-                    <Flex height="1" minWidth="8" background="neutral-strong"></Flex>
-                    <Text>{item}</Text>
+                    <div className={styles.subIndicator} />
+                    <Text
+                      variant="body-default-xs"
+                      onBackground="neutral-weak"
+                      className={styles.tocText}
+                    >
+                      {item}
+                    </Text>
                   </Flex>
                 ))}
               </>

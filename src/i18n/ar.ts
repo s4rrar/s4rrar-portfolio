@@ -23,7 +23,7 @@ const ar: Translation = {
       "أنا الحسن صرار، عالم كمبيوتر، مهتم بالأمن السيبراني وهندسة البرمجيات والذكاء الاصطناعي",
   },
   about: {
-    label: "عنّي",
+    label: "عني",
     title: "عنّي – الحسن صرار",
     description: "تعرف على الحسن صرار، مهندس برمجيات من آسيا/القدس",
     telegram: "تواصل عبر تيليجرام",
@@ -94,9 +94,11 @@ const ar: Translation = {
     title: "٤٠٤",
     heading: "الصفحة غير موجودة",
     description: "الصفحة التي تبحث عنها غير موجودة.",
+    backToHome: "العودة إلى الرئيسية",
   },
   footer: {
     follow: "تابعني على",
+    backToTop: "العودة إلى الأعلى",
   },
   routeGuard: {
     incorrectPassword: "كلمة المرور غير صحيحة",

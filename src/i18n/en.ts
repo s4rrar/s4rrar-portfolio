@@ -92,9 +92,11 @@ const en = {
     title: "404",
     heading: "Page Not Found",
     description: "The page you are looking for does not exist.",
+    backToHome: "Back to Home",
   },
   footer: {
     follow: "Follow me on",
+    backToTop: "Back to top",
   },
   routeGuard: {
     incorrectPassword: "Incorrect password",

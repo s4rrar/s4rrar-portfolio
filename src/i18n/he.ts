@@ -93,9 +93,11 @@ const he: Translation = {
     title: "404",
     heading: "הדף לא נמצא",
     description: "הדף שאתה מחפש אינו קיים.",
+    backToHome: "חזרה לדף הבית",
   },
   footer: {
     follow: "עקוב אחריי ב",
+    backToTop: "חזרה למעלה",
   },
   routeGuard: {
     incorrectPassword: "סיסמה שגויה",
