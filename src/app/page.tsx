@@ -52,12 +52,7 @@ export default async function Home() {
       <Column fillWidth horizontal="center" gap="m">
         <Column maxWidth="s" horizontal="center" align="center">
           {home.featured.display && (
-            <RevealFx
-              fillWidth
-              horizontal="center"
-              paddingTop="16"
-              paddingBottom="32"
-            >
+            <RevealFx fillWidth horizontal="center" paddingTop="16" paddingBottom="32">
               <Badge
                 className="tactile-press"
                 background="brand-alpha-weak"

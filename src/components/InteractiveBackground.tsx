@@ -213,17 +213,33 @@ export function InteractiveBackground() {
 
     initCanvasElements();
 
-    // Event listeners for user interaction
-    const onMouseMove = (e: MouseEvent) => {
-      mouse.targetX = e.clientX;
-      mouse.targetY = e.clientY;
+    // Detect mobile or touch-primary devices
+    const isMobileDevice = () => {
+      if (typeof window === "undefined") return false;
+      if (window.innerWidth <= 768) return true;
+      if (window.matchMedia) {
+        if (window.matchMedia("(hover: none)").matches) return true;
+        if (
+          window.matchMedia("(pointer: coarse)").matches &&
+          !window.matchMedia("(pointer: fine)").matches
+        ) {
+          return true;
+        }
+      }
+      return false;
     };
 
-    const onTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        mouse.targetX = e.touches[0].clientX;
-        mouse.targetY = e.touches[0].clientY;
+    // Event listeners for user interaction
+    const onMouseMove = (e: MouseEvent) => {
+      if (isMobileDevice()) {
+        mouse.targetX = null;
+        mouse.targetY = null;
+        mouse.x = null;
+        mouse.y = null;
+        return;
       }
+      mouse.targetX = e.clientX;
+      mouse.targetY = e.clientY;
     };
 
     const onMouseLeave = () => {
@@ -232,12 +248,18 @@ export function InteractiveBackground() {
     };
 
     const onResize = () => {
+      if (isMobileDevice()) {
+        mouse.targetX = null;
+        mouse.targetY = null;
+        mouse.x = null;
+        mouse.y = null;
+      }
       initCanvasElements();
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("resize", onResize);
     // Check reduced motion preference
     const mediaReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let isReducedMotion = mediaReducedMotion.matches;
@@ -274,8 +296,8 @@ export function InteractiveBackground() {
 
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth mouse coordinate easing
-      if (mouse.targetX !== null && mouse.targetY !== null) {
+      // Smooth mouse coordinate easing (desktop only)
+      if (!isMobileDevice() && mouse.targetX !== null && mouse.targetY !== null) {
         if (mouse.x === null || mouse.y === null) {
           mouse.x = mouse.targetX;
           mouse.y = mouse.targetY;
@@ -303,8 +325,8 @@ export function InteractiveBackground() {
         let renderX = orb.x;
         let renderY = orb.y;
 
-        // Apply easing-based mouse parallax shift
-        if (mouse.x !== null && mouse.y !== null) {
+        // Apply easing-based mouse parallax shift (desktop only)
+        if (!isMobileDevice() && mouse.x !== null && mouse.y !== null) {
           const dx = mouse.x - width / 2;
           const dy = mouse.y - height / 2;
           renderX += dx * orb.parallaxFactor;
@@ -330,8 +352,8 @@ export function InteractiveBackground() {
         ctx.fill();
       });
 
-      // 1.5. Draw cursor spotlight/radial glow (behind connections and particles)
-      if (mouse.x !== null && mouse.y !== null) {
+      // 1.5. Draw cursor spotlight/radial glow and circle highlight (desktop only)
+      if (!isMobileDevice() && mouse.x !== null && mouse.y !== null) {
         // Layer 1: Large soft ambient glow (brand color)
         const ambientRadius = 260;
         const ambientGlow = ctx.createRadialGradient(
@@ -412,8 +434,8 @@ export function InteractiveBackground() {
         p.vx += (Math.random() - 0.5) * 0.015;
         p.vy += (Math.random() - 0.5) * 0.015;
 
-        // Interaction with mouse cursor
-        if (mouse.x !== null && mouse.y !== null) {
+        // Interaction with mouse cursor (desktop only)
+        if (!isMobileDevice() && mouse.x !== null && mouse.y !== null) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
           const dist = Math.hypot(dx, dy);
@@ -486,7 +508,6 @@ export function InteractiveBackground() {
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
       window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("mouseleave", onMouseLeave);
       window.removeEventListener("resize", onResize);
       mediaReducedMotion.removeEventListener("change", onReducedMotionChange);

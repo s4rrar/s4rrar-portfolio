@@ -241,12 +241,7 @@ export default async function About() {
 
           {about.work.display && (
             <>
-              <Heading
-                as="h2"
-                id={t.about.work.title}
-                variant="display-strong-s"
-                marginBottom="m"
-              >
+              <Heading as="h2" id={t.about.work.title} variant="display-strong-s" marginBottom="m">
                 {t.about.work.title}
               </Heading>
 
@@ -297,11 +292,7 @@ export default async function About() {
                         {experience.timeframe}
                       </Text>
                     </Row>
-                    <Text
-                      variant="body-default-s"
-                      onBackground="brand-weak"
-                      marginBottom="m"
-                    >
+                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
                       {experience.role}
                     </Text>
                     <Column gap="12">
