@@ -67,15 +67,15 @@ export function InteractiveBackground() {
         const hex = colorStr.slice(1);
         const len = hex.length;
         if (len === 3) {
-          const r = parseInt(hex[0] + hex[0], 16);
-          const g = parseInt(hex[1] + hex[1], 16);
-          const b = parseInt(hex[2] + hex[2], 16);
+          const r = Number.parseInt(hex[0] + hex[0], 16);
+          const g = Number.parseInt(hex[1] + hex[1], 16);
+          const b = Number.parseInt(hex[2] + hex[2], 16);
           return `${r}, ${g}, ${b}`;
         }
         if (len === 6 || len === 8) {
-          const r = parseInt(hex.slice(0, 2), 16);
-          const g = parseInt(hex.slice(2, 4), 16);
-          const b = parseInt(hex.slice(4, 6), 16);
+          const r = Number.parseInt(hex.slice(0, 2), 16);
+          const g = Number.parseInt(hex.slice(2, 4), 16);
+          const b = Number.parseInt(hex.slice(4, 6), 16);
           return `${r}, ${g}, ${b}`;
         }
       }
@@ -280,7 +280,7 @@ export function InteractiveBackground() {
       if (isReducedMotion) {
         // Draw one static ambient frame and wait
         ctx.clearRect(0, 0, width, height);
-        orbs.forEach((orb) => {
+        for (const orb of orbs) {
           const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
           const baseRgb = colors[orb.colorType];
           grad.addColorStop(0, `rgba(${baseRgb}, 0.05)`);
@@ -289,7 +289,7 @@ export function InteractiveBackground() {
           ctx.beginPath();
           ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
           ctx.fill();
-        });
+        }
         animationFrameId = requestAnimationFrame(renderFrame);
         return;
       }
@@ -311,7 +311,7 @@ export function InteractiveBackground() {
       }
 
       // 1. Draw soft gradient background orbs with subtle parallax
-      orbs.forEach((orb) => {
+      for (const orb of orbs) {
         // Slow float
         orb.x += orb.vx;
         orb.y += orb.vy;
@@ -350,7 +350,7 @@ export function InteractiveBackground() {
         ctx.beginPath();
         ctx.arc(renderX, renderY, orb.radius, 0, Math.PI * 2);
         ctx.fill();
-      });
+      }
 
       // 1.5. Draw cursor spotlight/radial glow and circle highlight (desktop only)
       if (!isMobileDevice() && mouse.x !== null && mouse.y !== null) {
@@ -429,7 +429,7 @@ export function InteractiveBackground() {
       ctx.globalAlpha = 1.0;
 
       // 3. Draw particles and apply repulsion physics
-      particles.forEach((p) => {
+      for (const p of particles) {
         // Organic Brownian-style motion noise
         p.vx += (Math.random() - 0.5) * 0.015;
         p.vy += (Math.random() - 0.5) * 0.015;
@@ -497,7 +497,7 @@ export function InteractiveBackground() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
-      });
+      }
 
       animationFrameId = requestAnimationFrame(renderFrame);
     };
